@@ -11,10 +11,12 @@ router.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const user = new User({ email, username });
-    const RegisteredUser = await User.register(user, password);
-    console.log(RegisteredUser);
-    req.flash("success", "Welcome to Yelp Camp!");
-    res.redirect("/campgrounds");
+    const registeredUser = await User.register(user, password);
+    req.login(registeredUser, err => {
+      if(err) return next(err);
+      req.flash("success", "Welcome to Yelp Camp!");
+      res.redirect("/campgrounds");
+    });
   } catch (err) {
     req.flash("error", err.message);
     res.redirect("/register");
@@ -33,8 +35,18 @@ router.post(
   }),
   (req, res) => {
     req.flash("success", "Welcome back!");
-    res.redirect("/campgrounds");
+    // TODO: Return url doesn't work 
+    // passport overwrites the session
+    const redirectUrl = req.session.returnTo || '/campgrounds';
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
   }
 );
+
+router.get("/logout", (req, res) => {
+  req.logout(()=>{});
+  req.flash("success", "Successfully logged out!");
+  res.redirect("/campgrounds");
+});
 
 module.exports = router;
