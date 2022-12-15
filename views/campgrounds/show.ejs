@@ -2,9 +2,8 @@
 <link rel="stylesheet" href="/styles/starability.css" />
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-md-6">
         <div class="card mb-3">
-            <!-- <img src="" class="card-img-top" alt="..."> -->
             <div id="carousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                 <% campground.images.forEach((img, i) => {%> 
@@ -47,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-md-6">
         <% if(currentUser) { %>
         <h2>Leave a Review</h2>
         <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" method="post" class="mb-3 needs-validation" novalidate>
